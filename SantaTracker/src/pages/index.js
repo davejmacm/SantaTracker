@@ -35,6 +35,37 @@ const IndexPage = () => {
      console.log('Failed to find Santa!: ${e}');
    }
    console.log('routeJson', routeJson);
+   const {destinations = []} = routeJson || {};
+    const destinationVisited = destinations.filter(({arrival}) => arrival <Date.now());
+    const destinationsWithPresents = destinationVisited.filter(({presentsDelivered}) => presentsDelivered > 0);
+
+    if ( destinationsWithPresents.length === 0 ) {
+      // Create a Leaflet Market instance using Santa's LatLng location
+      const center = new L.LatLng( 0, 0 );
+      const noSanta = L.marker( center, {
+        icon: L.divIcon({
+          className: 'icon',
+          html: `<div class="icon-santa">🎅</div>`,
+          iconSize: 50
+        })
+      });
+      noSanta.addTo( leafletElement );
+      noSanta.bindPopup( `Santa's still at the North Pole!` );
+      noSanta.openPopup();
+      return;
+    }
+   const lastKnownDestination = destinationsWithPresents[destinationsWithPresents.length - 1]
+   const santaLocation = new L.LatLng( lastKnownDestination.location.lat, lastKnownDestination.location.lng);
+
+   const santaMarker = L.marker(santaLocation, {
+     icon: L.divIcon({
+       className: 'icon',
+       html: `<div class="icon-santa">🎅</div>`,
+       iconSize: 50
+     })
+   });
+
+   santaMarker.addTo(leafletElement);
   }
 
   const mapSettings = {
@@ -55,12 +86,7 @@ const IndexPage = () => {
       </Map>
 
       <Container type="content" className="text-center home-start">
-        <h2>Still Getting Started?</h2>
-        <p>Run the following in your terminal!</p>
-        <pre>
-          <code>gatsby new [directory] https://github.com/colbyfayock/gatsby-starter-leaflet</code>
-        </pre>
-        <p className="note">Note: Gatsby CLI required globally for the above command</p>
+       
       </Container>
     </Layout>
   );
