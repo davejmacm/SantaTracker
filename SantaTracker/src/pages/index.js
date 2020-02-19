@@ -10,8 +10,8 @@ import Map from 'components/Map';
 
 
 const LOCATION = {
-  lat: 38.9072,
-  lng: -77.0369
+  lat: 51.5074,
+  lng: 0.1278
 };
 const CENTER = [LOCATION.lat, LOCATION.lng];
 const DEFAULT_ZOOM = 2;
@@ -86,7 +86,7 @@ const IndexPage = () => {
       </Map>
 
       <Container type="content" className="text-center home-start">
-       
+       <h1>Merry Christmas!</h1>
       </Container>
     </Layout>
   );
